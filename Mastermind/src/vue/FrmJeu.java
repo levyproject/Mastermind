@@ -1,8 +1,6 @@
 package vue;
 
 import mastermind.Jeu;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,55 +14,32 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 
-import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+
 import java.util.ArrayList;
 
-import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
 import javax.swing.JTextPane;
+import javax.swing.DefaultComboBoxModel;
 
 public class FrmJeu extends JFrame {
 
-	
 	/**
-	 * propri�t�s
+	 * propriétés
 	 */
 	
 	private JPanel contentPane;
 	private Controle controle;
-	private int X, Y;
-	public int coup = 10;
+	public int coup = 1;
 	public  ArrayList<JComboBox> jComboList = new ArrayList<>();
 	public  ArrayList<JLabel> jColonnes = new ArrayList<>();
-    private Jeu jeu;
 	public static ArrayList<Integer> pion = new ArrayList<>();
 
-	
-	/**
-	 * Launch the application.
-	 */
-	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					FrmJeu frame = new FrmJeu();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	
 	
 	/**
 	 * Create the frame.
@@ -86,7 +61,9 @@ public class FrmJeu extends JFrame {
 		contentPane.add(titreJeu);
 		
 
-
+		/**
+		 * Création et placement des pions de chaque couleur.
+		 */
 		JButton pionBleu = new JButton("");
 		Image cercleBleu = new ImageIcon(this.getClass().getResource("/cercle bleu.jpg")).getImage();
 		pionBleu.setIcon(new ImageIcon(cercleBleu));
@@ -144,16 +121,13 @@ public class FrmJeu extends JFrame {
 		textPane.setBounds(402, 503, 72, 48);
 		contentPane.add(textPane);
 		
-		// Ne fonctionne pas
+		/**
+		 * Ne fonctionne pas, ne peux pas récuperer l'indice du jComboList pour l'actionListener.
+		 */
 		for (int i = 0; i < 10; i++) {
 			
 		JButton btnValider = new JButton("ok");
-		btnValider.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String choix = (String)jComboList.get(0).getSelectedItem();
-				textPane.setText(choix);
-			}
-		});
+		btnValider.addActionListener(new Ecouteur()); 
 		validationPanel.add(btnValider);
 		}
 		
@@ -167,32 +141,38 @@ public class FrmJeu extends JFrame {
 		}
 		
 		String [] pions = {"Noir", "Rouge", "Bleu", "Vert", "Violet", "Jaune"};
-
-		ArrayList<String> choixList = new ArrayList<>();
-		
 		for (int i = 0; i < 40; i++) {
 			jComboList.add(new JComboBox(pions));
-			jComboList.get(i).setSelectedItem(null);
+			jComboList.get(i).setSelectedItem(null); 
+			jComboList.get(i).addItemListener(new ItemListener(){
+				  public void itemStateChanged(ItemEvent event) {
+				    switch (event.getStateChange()) {  
+				      case ItemEvent.SELECTED: { 
+				        System.out.println(jComboList.get(36).getSelectedItem().toString());
+				      }
+				      //
+				      case ItemEvent.DESELECTED: 
+				      default: { 
+				        // traitement 2     
+				      }
+				    }
+				  }	
+				});
+		
+//			comboBox.setModel(new DefaultComboBoxModel(new String[] {""+i}));
 			plateauJeu.add(jComboList.get(i));
 		}
-
-	
-		
-		
-		
-		/*
-		 * ActionListener ComboBox
-		 */
-//		JComboBox comboBox = new JComboBox(pions);
-//		comboBox.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//			}
-//		});
-//		plateauJeu.add(comboBox);
-		
-//		Image cercleGris = new ImageIcon(this.getClass().getResource("/cercle gris.jpg")).getImage();
-//		vide1_1.setIcon(new ImageIcon(cercleGris));
-
-
+		jComboList.get(39).addActionListener(new Ecouteur());
 	}
+
+
+class Ecouteur implements ActionListener
+{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			System.out.println("OK");
+		}
+}
+	
 }
