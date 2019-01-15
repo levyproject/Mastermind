@@ -142,13 +142,14 @@ public class FrmJeu extends JFrame {
 		
 		String [] pions = {"Noir", "Rouge", "Bleu", "Vert", "Violet", "Jaune"};
 		for (int i = 0; i < 40; i++) {
+			final int j=i;
 			jComboList.add(new JComboBox(pions));
 			jComboList.get(i).setSelectedItem(null); 
 			jComboList.get(i).addItemListener(new ItemListener(){
 				  public void itemStateChanged(ItemEvent event) {
 				    switch (event.getStateChange()) {  
 				      case ItemEvent.SELECTED: { 
-				        System.out.println(jComboList.get(36).getSelectedItem().toString());
+				        System.out.println(jComboList.get(j).getSelectedItem().toString());
 				      }
 				      //
 				      case ItemEvent.DESELECTED: 
